@@ -1,6 +1,6 @@
 SELECT
     subscriptions.customer_id,
-    subscriptions.subscription_id,
+    orders.subscription_id, -- from orders because some subscription_ids only present in this table
     subscriptions.plan_name,
     subscriptions.number_of_licenses,
     COALESCE(subscriptions.start_date,
