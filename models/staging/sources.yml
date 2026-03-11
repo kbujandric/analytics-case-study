@@ -1,0 +1,10 @@
+version: 2
+
+sources:
+  - name: ninox
+    database: decisive-forest-415713
+    schema: ninox
+    tables:
+      - name: subscriptions
+      - name: orders
+      - name: users
