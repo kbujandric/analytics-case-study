@@ -11,7 +11,7 @@ SELECT
     start_date,
     end_date,
     mrr,
-    month
+    DATE_TRUNC(end_date, MONTH) AS month
 FROM {{ ref('int_subs_monthly') }}
 
 UNION ALL -- extra month with 0 MRR at end of customer's last subscription to be able to track lost MRR (churn)

@@ -10,8 +10,6 @@ WITH partition_customer AS (
 SELECT
     customer_id,
     subscription_id,
-    start_date,
-    end_date,
     month,
     mrr, 
     prev_mrr, 
