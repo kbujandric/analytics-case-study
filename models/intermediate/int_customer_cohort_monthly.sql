@@ -10,7 +10,7 @@ SELECT
     monthly.customer_id,
     monthly.mrr,
     first_sub.cohort,
-    DATE_DIFF(monthly.month, first_sub.cohort, MONTH) + 1 AS lifetime_month
+    DATE_DIFF(monthly.month, first_sub.cohort, MONTH) AS lifetime_month
 FROM {{ ref ("int_subs_monthly") }} AS monthly
 LEFT JOIN first_sub 
     ON monthly.customer_id = first_sub.customer_id
