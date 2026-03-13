@@ -13,4 +13,3 @@ SELECT
 FROM {{ ref('int_orders_enriched') }} AS orders
 LEFT JOIN {{ ref('stg_subscriptions') }} AS subscriptions
     ON orders.subscription_id = subscriptions.subscription_id
-ORDER BY start_date
