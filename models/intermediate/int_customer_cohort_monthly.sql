@@ -1,3 +1,4 @@
+-- find each customers' first subscription start; that determines their cohort
 WITH first_sub AS (
     SELECT 
         customer_id,
@@ -6,6 +7,8 @@ WITH first_sub AS (
     GROUP BY customer_id
 )
 
+-- for each calendar month in the full customer subscription duration (from beginning to first to end of last)
+-- calculate lifetime month
 SELECT 
     monthly.customer_id,
     monthly.mrr,
