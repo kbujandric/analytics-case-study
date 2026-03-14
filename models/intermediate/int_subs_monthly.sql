@@ -9,4 +9,3 @@ SELECT
     DATE_ADD(start_date, INTERVAL month_offset MONTH) AS month 
 FROM {{ ref('int_subs_enriched') }}
 CROSS JOIN UNNEST(GENERATE_ARRAY(0, 11)) AS month_offset
-ORDER BY customer_id, subscription_id, start_date, month

@@ -1,8 +1,9 @@
 SELECT
     subscriptions.customer_id,
-    orders.subscription_id, -- from orders because some subscription_ids only present in this table
+    subscriptions.subscription_id, 
     subscriptions.plan_name,
     subscriptions.number_of_licenses,
+    -- date imputation based on order_date; start_date and order_date equivalence confirmed in exploratory analyses
     DATE_TRUNC(COALESCE(subscriptions.start_date, orders.order_date), MONTH) AS start_date,
     DATE_TRUNC(
         COALESCE(
@@ -11,6 +12,5 @@ SELECT
         MONTH) AS end_date,
     orders.mrr
 FROM {{ ref('int_orders_enriched') }} AS orders
-LEFT JOIN {{ ref('stg_subscriptions') }} AS subscriptions
+INNER JOIN {{ ref('stg_subscriptions') }} AS subscriptions
     ON orders.subscription_id = subscriptions.subscription_id
-ORDER BY start_date
