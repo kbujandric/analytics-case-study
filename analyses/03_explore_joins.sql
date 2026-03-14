@@ -55,7 +55,7 @@ WHERE
 
 -- are subscriptions always continuous? or are there sometimes pauses between them?
     -- despite the task definition at hand,
-    -- I think it's important to think about the possibility of "resurrections",
+    -- I think it's important to think about the possibility of reactivations,
     -- i.e., customers that left for a certain period of time and then came back to get a new subscription
     -- if we treat them as new customers, we are skewing our insights and losing valuable information
 
@@ -93,7 +93,7 @@ FROM previous
 WHERE 
     start_date != prev_end_date
 ORDER BY customer_id, start_date
--- no rows returned, meaning we have no resurrections
+-- no rows returned, meaning we have no reactivations
 
 
 -- can a customer have any simultaneous subscriptions?

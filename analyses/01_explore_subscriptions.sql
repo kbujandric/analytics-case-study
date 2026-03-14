@@ -54,4 +54,4 @@ FROM {{ source("ninox", "subscriptions") }}
 -- OTHER TESTS REGARDING SUBSCRIPTION DURATION / GAP:
 -- explored later, after joining orders and subscriptions (date imputation):
     -- can a customer have >1 active subscription at a time?
-    -- a gap between end of one and start of next subscription? "ressurections" 
+    -- a gap between end of one and start of next subscription (reactivations)
