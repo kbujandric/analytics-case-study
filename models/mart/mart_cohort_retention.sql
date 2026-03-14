@@ -4,7 +4,7 @@ WITH grouped AS(
     lifetime_month,
     COUNT(DISTINCT customer_id) AS cohort_size,
     SUM(mrr) AS total_mrr
-  FROM `dev_ninox.int_customer_cohort_monthly`
+  FROM {{ ref (int_customer_cohort_monthly) }}
   GROUP BY cohort, lifetime_month
 )
 
