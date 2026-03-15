@@ -24,3 +24,6 @@ and Cohort Retention for a B2B SaaS business.
 
 ## Data Lineage
 ![DAG](assets/lineage.png)
+
+## Documentation
+[Short documentation](documentation.pdf)
