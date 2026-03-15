@@ -8,5 +8,6 @@ SELECT
     SUM(CASE WHEN change_type = 'contraction' THEN mrr_change END) AS mrr_contraction,
     SUM(CASE WHEN change_type = 'lost' THEN mrr_change END) AS mrr_lost
 FROM {{ ref("int_mrr_movements") }}
+WHERE change_type IN ("new", "expansion", "contraction", "lost")
 GROUP BY month
 ORDER BY month
