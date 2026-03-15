@@ -1,0 +1,45 @@
+version: 2
+
+models:
+  - name: stg_orders
+    description: "Cleaned orders with parsed JSON metadata. One row per order."
+    columns:
+      - name: order_id
+        description: "Primary key"
+        tests:
+          - unique
+          - not_null
+      - name: subscription_id
+        description: "Foreign key for subscriptions table."
+        tests:
+          - unique
+          - not_null
+      - name: order_date
+        description: "Date when order was placed. DATE format."
+      - name: gross_amount
+        description: "Gross value of order in local currency."
+        tests:
+          - not_null
+      - name: exchange_rate
+        description: "Exchange rate from original currency to EUR."
+        tests:
+          - not_null
+      - name: tax_percentage
+        description: "Tax percentage associated with order."
+        tests:
+          - not_null
+
+  - name: stg_subscriptions
+    description: "Subscription data. One row per subscription."
+    columns:
+      - name: subscription_id
+        description: "Primary key"
+        tests:
+          - unique
+          - not_null
+      - name: customer_id
+        description: "Customer ID associated with subscription."
+      - name: start_date
+        description: "Start date of subscription. DATE format."
+      - name: end_date
+        description: "End date of subscription. DATE format."

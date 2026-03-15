@@ -1,0 +1,78 @@
+version: 2
+
+models:
+  - name: int_orders_enriched
+    description: "Calculating net revenue and monthly recurring revenue (MRR). One row per order."
+    columns:
+      - name: net_revenue
+        description: "Net revenue (EUR) associated with order. Gross amount excluding tax, converted to EUR. Tax is calculated as a percentage of gross amount."
+        tests: 
+          - not_null
+      - name: mrr
+        description: "Monthly recurring revenue (MRR, in EUR). Net revenue divided by 12."
+        tests:
+          - not_null
+
+  - name: int_subs_enriched
+    description: "Joined stg_subscriptions and int_orders_enriched. Missing subscription start date and end date imputed with order date and order date + 12 months."
+    columns:
+      - name: start_date
+        description: "Subscription start date, either original or, if missing, imputed by order date."
+        tests:
+          - not_null
+      - name: end_date
+        description: "Subscription end date, either original or, if missing, imputed by order date + 12 months. One row per subscription."
+        tests:
+          - not_null
+
+  - name: int_subs_monthly
+    description: "Expanding each subscription into 12 months, corresponding to its duration. One row per subscription per month of subscription duration."
+    tests:
+      - dbt_utils.unique_combination_of_columns:
+          arguments:
+            combination_of_columns:
+              - subscription_id
+              - month    
+    columns:
+      - name: month
+        description: "Calendar month corresponding to month during subscription. Calculated using subscription start month and adding months, ranging from 0 to 11."
+        tests:
+          - not_null
+
+  - name: int_subs_monthly_extended
+    description: "Adding one row with 0 MRR for last month of a customer's last subscription. This last row is necessary for capturing churn (Lost MRR)."
+
+  - name: int_mrr_movements
+    description: "Calculating change in MRR between months within a single customer and assigning it to the appropriate movement category."
+    columns:
+      - name: end_mrr
+        description: "Customer's MRR in subscription calendar month, assigned from typical MRR for customer."
+        tests:
+          - not_null
+      - name: start_mrr
+        description: "Customer's MRR in previous month, assigned 0 for first month of first subscription."
+        tests:
+          - not_null
+      - name: mrr_change
+        description: "Difference between MRR in previous and subscription calendar month. Assigned to full MRR in first month of first subscription."
+        tests:
+          - not_null
+      - name: change_type
+        description: "MRR Movement type, based on business rules (new, expansion, contraction, lost). Two additional MRR change types included only for tracking categorization logic and later debugging."
+        tests:
+          - accepted_values:
+              arguments:
+                values: ["new", "expansion", "contraction", "lost", "unchanged", "mid_subscription"]
+
+  - name: int_customer_cohort_monthly
+    description: "Categorizing each customer into cohort based on first month of their first subscription. Calculating lifetime month based on first month of first subscription and current subscription month. One row per customer per lifetime month."
+    columns:
+      - name: cohort
+        description: "Customer's cohort. Month of acquisition (DATE format)."
+        tests:
+          - not_null
+      - name: lifetime_month
+        description: "Customer's current lifetime month. Calculated as difference between acquisition month and subscription calendar month."
+        tests:
+          - not_null
+      
