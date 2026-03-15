@@ -1,8 +1,6 @@
 SELECT
     subscriptions.customer_id,
     subscriptions.subscription_id, 
-    subscriptions.plan_name,
-    subscriptions.number_of_licenses,
     -- date imputation based on order_date; start_date and order_date equivalence confirmed in exploratory analyses
     DATE_TRUNC(COALESCE(subscriptions.start_date, orders.order_date), MONTH) AS start_date,
     DATE_TRUNC(
