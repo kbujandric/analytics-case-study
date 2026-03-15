@@ -1,15 +1,26 @@
-Welcome to your new dbt project!
+# SaaS MRR Analytics – Junior Analytics Engineer Case Study
 
-### Using the starter project
+## Overview
+Data pipeline and dashboard built to calculate MRR Movements 
+and Cohort Retention for a B2B SaaS business.
 
-Try running the following commands:
-- dbt run
-- dbt test
+## Stack
+- **Warehouse:** BigQuery
+- **Transformation:** dbt
+- **Visualization:** Looker Studio
 
+## Project Structure
+- `/analyses` – exploratory SQL queries on raw data
+- `/models/staging` – raw data cleaning and JSON parsing
+- `/models/intermediate` – enrichment, joins, and core transformations
+- `/models/mart` – final aggregated output models
 
-### Resources:
-- Learn more about dbt [in the docs](https://docs.getdbt.com/docs/introduction)
-- Check out [Discourse](https://discourse.getdbt.com/) for commonly asked questions and answers
-- Join the [chat](https://community.getdbt.com/) on Slack for live discussions and support
-- Find [dbt events](https://events.getdbt.com) near you
-- Check out [the blog](https://blog.getdbt.com/) for the latest news on dbt's development and best practices
+## Output
+- `mart_mrr_movements_monthly` – MRR movements by calendar month
+- `mart_cohort_retention` – cohort retention by lifetime month (absolute EUR amount and percentage of MRR in Month 0)
+
+## Dashboard
+[Link to Looker Studio dashboard](https://lookerstudio.google.com/reporting/9f4fcd31-b4ec-46b2-8de6-87387e44ddc7)
+
+## Data Lineage
+![DAG](assets/lineage.png)
