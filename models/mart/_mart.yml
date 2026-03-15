@@ -1,0 +1,43 @@
+version: 2
+
+models:
+  - name: mart_mrr_movements_monthly
+    description: "Aggregating all MRR metrics previously calculated to a subscription month level. One row per month."
+    columns:
+      - name: month
+        description: "Subscription calendar month."
+        tests:
+          - unique
+          - not_null
+      - name: mrr_start_of_period
+        description: "Total MRR at the start of the given subscription calendar month."
+      - name: mrr_end_of_period
+        description: "Total MRR at the end of the given subscription calendar month (the MRR for the month itself)."
+      - name: mrr_change
+        description: "Total MRR difference between previous and subscription calendar month."
+      - name: mrr_new
+        description: "Total MRR change for given month that can be attributed to gaining new customers."
+      - name: mrr_expansion
+        description: "Total MRR change for given month that can be attributed to customers upgrading (choosing more expensive plan after previous subscription ended)."
+      - name: mrr_contraction
+        description: "Total MRR change for given month that can be attributed to customers downgrading (choosing a more affordable plan after previous subscription ended)."
+      - name: mrr_lost
+        description: "Total MRR change for given month that can be attributed to losing existing customers (customers not subscribing again after previous subscription ended)."
+
+  - name: mart_cohort_retention
+    description: "Aggregating MRR retention (both in absolute EUR amount and as percentage of total first subscription value) to a cohort and lifetime month level. One row per cohort per lifetime month."
+    tests:
+      - dbt_utils.unique_combination_of_columns:
+          arguments:
+            combination_of_columns:
+              - cohort
+              - lifetime_month   
+    columns:
+      - name: cohort_size
+        description: "Number of customers in a given cohort at the given lifetime month."
+      - name: total_mrr
+        description: "Total MRR for given cohort in a given lifetime month."
+      - name: pct_retention
+        description: "Percentage of cohort's MRR in month 0 (first subscription month)."
+
+

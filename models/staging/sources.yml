@@ -4,7 +4,11 @@ sources:
   - name: ninox
     database: decisive-forest-415713
     schema: ninox
+    description: "Raw data for analytics engineering case study."
     tables:
       - name: subscriptions
+        description: "One row per subscription, containing information on subscription type."
       - name: orders
+        description: "One row per order (1:1 mapping to subscription), containing payment information."
       - name: users
+        description: "One row per user, containing information about customer."
