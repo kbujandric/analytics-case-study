@@ -57,9 +57,6 @@ FROM {{ source("ninox", "orders") }}
 -- only missing tax_percentage for 11 rows
 -- how big of a problem is this?
 
-
--- checking other values of tax_percentage: if often large, 
--- then MRR could be gravely overestimated
 WITH parsed AS (
     SELECT
         subscription_id,
@@ -80,5 +77,5 @@ SELECT
 FROM parsed
 GROUP BY tax_percentage
 -- out of >700 orders, 614 have tax_percentage = 0, and only 11 are NULL
--- I would flag this as an upstream problem but not discard these rows entirely, 
+-- I would flag this as an upstream problem and discard these rows, 
 -- at least for this case study's purposes
