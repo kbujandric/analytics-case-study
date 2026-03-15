@@ -9,7 +9,10 @@ WITH grouped AS(
 )
 
 SELECT 
-    *,
+    cohort,
+    lifetime_month,
+    cohort_size,
+    total_mrr,
     total_mrr / FIRST_VALUE(total_mrr) OVER (PARTITION BY cohort ORDER BY lifetime_month) * 100 AS pct_retention
 FROM grouped
 ORDER BY cohort, lifetime_month
