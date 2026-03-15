@@ -12,7 +12,6 @@ SELECT
     subscription_id,
     month,
     mrr, 
-    prev_mrr, 
     mrr AS end_mrr,
 
     CASE -- Start of period MRR is always previous month's MRR, EXCEPT for first month of customer's first subscription
@@ -26,7 +25,7 @@ SELECT
         ELSE mrr - prev_mrr -- otherwise compare this month to previous
     END AS mrr_change,  
     
-    -- categorizing MRR movements into 4 movement types
+    -- categorizing MRR movements into 4 (+1 for sanity check) movement types
     CASE 
         WHEN row_num = 1 THEN "new" -- first month of customer's first subscription
         WHEN prev_subs_id != subscription_id THEN -- beginning of new subscription: compare MRRs
