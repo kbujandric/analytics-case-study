@@ -1,6 +1,8 @@
 ------------------------------------------
 -- MISMATCHING ROWS
 ------------------------------------------
+-- using cleaned orders data: no duplicates, no rows with missing tax_percentage
+
 -- combining the tables using full outer join,
 -- then finding those rows that have no matches ("orphans")
 -- and marking them to clarify type of mismatch
@@ -11,13 +13,15 @@ SELECT
         WHEN subscriptions.subscription_id IS NULL THEN 'order has no subscription'
         WHEN orders.order_id IS NULL THEN 'subscription has no order'
     END AS mismatch_type
-FROM {{ source("ninox", "orders") }} AS orders
+FROM (SELECT DISTINCT * FROM {{ source("ninox", "orders") }}) AS orders -- deduplication
 FULL OUTER JOIN {{ source("ninox", "subscriptions") }} AS subscriptions 
     USING (subscription_id)
 WHERE 
-    orders.order_id IS NULL 
+    (orders.order_id IS NULL 
     OR 
-    subscriptions.subscription_id IS NULL
+    subscriptions.subscription_id IS NULL)
+    AND
+    CAST(JSON_VALUE(orders.checkout_metadata, '$.tax_percentage') AS FLOAT64) IS NOT NULL -- remove orders with missing tax_percentage
 -- 2 orphaned orders: have information on transaction, but no information on customer_id
 -- DECISION: drop these rows for these analyses because customer identity is crucial;
 -- MRR movements depend on having continuity *within customer*
@@ -55,7 +59,7 @@ WHERE
 
 -- are subscriptions always continuous? or are there sometimes pauses between them?
     -- despite the task definition at hand,
-    -- I think it's important to think about the possibility of "resurrections",
+    -- I think it's important to think about the possibility of reactivations,
     -- i.e., customers that left for a certain period of time and then came back to get a new subscription
     -- if we treat them as new customers, we are skewing our insights and losing valuable information
 
@@ -93,7 +97,7 @@ FROM previous
 WHERE 
     start_date != prev_end_date
 ORDER BY customer_id, start_date
--- no rows returned, meaning we have no resurrections
+-- no rows returned, meaning we have no reactivations
 
 
 -- can a customer have any simultaneous subscriptions?
