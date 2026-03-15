@@ -16,8 +16,8 @@ and Cohort Retention for a B2B SaaS business.
 - `/models/mart` – final aggregated output models
 
 ## Output
-- `mart_mrr_movements_monthly` – MRR movements by calendar month
-- `mart_cohort_retention` – cohort retention by lifetime month (absolute EUR amount and percentage of MRR in Month 0)
+- [mart_mrr_movements_monthly](output/mart_mrr_movements_monthly.csv) - MRR Movements by calendar month 
+- [mart_cohort_retention](output/mart_cohort_retention.csv) – cohort retention by lifetime month (absolute EUR amount and percentage of MRR in Month 0)
 
 ## Dashboard
 [Link to Looker Studio dashboard](https://lookerstudio.google.com/reporting/9f4fcd31-b4ec-46b2-8de6-87387e44ddc7)
